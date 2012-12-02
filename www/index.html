@@ -24,7 +24,7 @@
 				//Load cover and basic info
 				$.mobile.showPageLoadingMsg();
 				$.ajax({
-						url: makeURL("/?fields=cover,name,company_overview", access_token),
+						url: makeURL("/?fields=cover,name,description,website", access_token),
 						dataType: "json",
 						cache: true,
 						success: function(data) {
@@ -32,7 +32,8 @@
 							$("#cover-photo").attr("src",data.cover.source);
 							$("div#Home>div>h1").html(data.name);
 							$("#about-link").html("About "+data.name);
-							$("#company_overview").html(data.company_overview);
+							$("#description").html(data.description);
+							$("a#websitelink").attr("href", data.website).html("Visit Website");
 							
 							$.mobile.hidePageLoadingMsg();
 						}
@@ -43,12 +44,69 @@
 			{
 				var url = "https://graph.facebook.com/";
 				var fbid = "jayesh.kitukale";
-				var fbid = "coca-cola";
 				var fbid = "harley-davidson";
 				var fbid = "robinsharma";
+				var fbid = "coca-cola";
 				return url+fbid+action+"&access_token="+access_token;
 			}
-
+			$('div#eventspage')
+			.live('pageshow', function(e){
+				$.mobile.showPageLoadingMsg();
+				$.ajax({
+					url: makeURL("/?fields=events", access_token),
+					dataType: "json",
+					cache: true,
+					success: function(data) {
+						var string = "";
+						for(var i=0; i<data.events.data.length; i++)
+						{
+							var src = data.events.data[i].name;
+							string+="<li><a href='"+src+"' rel='external'>"+src+"</a></li>";
+						}
+						$("#events").append(string).listview( "refresh" ); 
+						$.mobile.hidePageLoadingMsg();
+					}
+				});
+			});
+			
+			$('div#aboutpage')
+			.live('pageshow', function(e){
+					$("img#about-picture").attr("src", makeURL("/picture", access_token));
+					$.mobile.showPageLoadingMsg();
+					$.ajax({
+						url: makeURL("/?fields=name,description,about,founded", access_token),
+						dataType: "json",
+						cache: true,
+						success: function(data) {
+							$("p#about-founded").html("Founded: "+data.founded);
+							$("p#about-description").html(data.description);
+							$("p#about-about").html(data.about);
+							$("h1#about-name").html("About "+data.name);
+							$.mobile.hidePageLoadingMsg();
+						}
+					});
+							
+							
+						return true;
+				});
+			$('div#mappage')
+				.live('pageshow', function(e){
+							$.mobile.showPageLoadingMsg();
+							$.ajax({
+								url: makeURL("/?fields=location", access_token),
+								dataType: "json",
+								cache: true,
+								success: function(data) {
+								//data.location.latitude
+								//data.location.longitude
+									$("img#static-location-map").attr('src', "http://maps.google.com/maps/api/staticmap?&markers=color:green%7Clabel:G%7C"+data.location.latitude+","+data.location.longitude+"&zoom=15&size=200x200&maptype=roadmap&sensor=false");
+									$.mobile.hidePageLoadingMsg();
+								}
+							});
+							
+							
+						return true;
+				});
 			$('div.gallery-page')
 				.live('pageshow', function(e){
 							//Load Photo Gallery
@@ -62,7 +120,7 @@
 									for(var i=0; i<data.data.length; i++)
 									{
 										var src = data.data[i].images[0].source;
-										string+="<li><a href='"+src+"' rel='external'><img src='"+src+"' /></a></li>";
+										string+="<li><a href='"+src+"'><img src='"+src+"' /></a></li>";
 									}
 									$("#g1").html(string);
 									
@@ -106,13 +164,15 @@
 	</div>
 	<div data-role="content" >
 		<img style="width:100%" id="cover-photo" src=""/>
-		<p id="company_overview">!COMPANY_OVERVIEW!</p>
+		<p id="description">!DESCRIPTION!</p>
 		<ul data-role="listview" data-inset="true">
 			<li><a href="#photo-gallery" data-dom-cache="true">Photo Gallery</a></li> 
-			<li><a href="#events">Events</a></li> 
+			<li><a href="#eventspage" data-dom-cache="true">Events</a></li> 
 		</ul> 
 		<ul data-role="listview" data-inset="true">
-			<li><a href="01-default.html" target="_blank" id="about-link">!ABOUT!</a></li> 
+			<li><a href="#aboutpage" id="about-link">!ABOUT!</a></li> 
+			<li><a href="!link!" target="_blank" id="websitelink">!WEBSITE!</a></li> 
+			<li><a href="#mappage" id="maplink">Locate on Map</a></li> 
 		</ul> 
 		
 	</div>
@@ -133,6 +193,53 @@
 		<h4>&copy; 2012 WhiteSnow Software, India</h4>
 	</div>
 </div>
+
+<!--Events Page-->
+<div data-role="page" data-add-back-btn="true" id="eventspage">
+	<div data-role="header">
+		<h1>Events</h1>
+	</div>
+	<div data-role="content">
+		<ul id="events" data-role="listview" data-inset="true">
+		</ul>
+	</div>
+	<div data-role="footer">
+		<h4>&copy; 2012 WhiteSnow Software, India</h4>
+	</div>
+</div>
+
+<!--About Page-->
+<div data-role="page" data-add-back-btn="true" id="aboutpage">
+	<div data-role="header">
+		<h1 id="about-name">About</h1>
+	</div>
+	<div data-role="content">
+		<img id="about-picture" src="">
+		<p id="about-founded">!FOUNDED!</p>
+		<p id="about-description">!DESCRIPTION!</p>
+		<p id="about-about">!ABOUT!</p>
+	</div>
+	<div data-role="footer">
+		<h4>&copy; 2012 WhiteSnow Software, India</h4>
+	</div>
+</div>
+
+<!--Map Page-->
+<div data-role="page" data-add-back-btn="true" id="mappage">
+	<div data-role="header">
+		<h1>Map</h1>
+	</div>
+	<div data-role="content">
+		<img id="static-location-map" src="">
+		<ul id="morelinks" data-role="listview" data-inset="true">
+		</ul>
+		<a href="#directionspage" data-role="button" data-icon="search" data-theme="b">Get Directions</a> 
+	</div>
+	<div data-role="footer">
+		<h4>&copy; 2012 WhiteSnow Software, India</h4>
+	</div>
+</div>
+
 </body>
 </html>
 <!--
