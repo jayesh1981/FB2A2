@@ -24,7 +24,7 @@
 				//Load cover and basic info
 				$.mobile.showPageLoadingMsg();
 				$.ajax({
-						url: makeURL("/?fields=cover,name", access_token),
+						url: makeURL("/?fields=cover,name,company_overview", access_token),
 						dataType: "json",
 						cache: true,
 						success: function(data) {
@@ -32,6 +32,8 @@
 							$("#cover-photo").attr("src",data.cover.source);
 							$("div#Home>div>h1").html(data.name);
 							$("#about-link").html("About "+data.name);
+							$("#company_overview").html(data.company_overview);
+							
 							$.mobile.hidePageLoadingMsg();
 						}
 					});
@@ -104,6 +106,7 @@
 	</div>
 	<div data-role="content" >
 		<img style="width:100%" id="cover-photo" src=""/>
+		<p id="company_overview">!COMPANY_OVERVIEW!</p>
 		<ul data-role="listview" data-inset="true">
 			<li><a href="#photo-gallery" data-dom-cache="true">Photo Gallery</a></li> 
 			<li><a href="#events">Events</a></li> 
