@@ -42,6 +42,7 @@
 				var url = "https://graph.facebook.com/";
 				//var fbid = "jayesh.kitukale";
 				var fbid = "coca-cola";
+				var fbid = "harley-davidson";
 				return url+fbid+action+"&access_token="+access_token;
 			}
 
@@ -63,9 +64,9 @@
 									$("#g1").html(string);
 									
 									var 
-							currentPage = $(e.target),
-							options = {},
-							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
+										currentPage = $(e.target),
+										options = {},
+										photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
 									$.mobile.hidePageLoadingMsg();
 								}
 							});
