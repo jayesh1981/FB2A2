@@ -61,14 +61,16 @@
 										string+="<li><a href='"+src+"' rel='external'><img src='"+src+"' /></a></li>";
 									}
 									$("#g1").html(string);
+									
+									var 
+							currentPage = $(e.target),
+							options = {},
+							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
 									$.mobile.hidePageLoadingMsg();
 								}
 							});
 							
-							var 
-							currentPage = $(e.target),
-							options = {},
-							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
+							
 						return true;
 				})
 				.live('pagehide', function(e){
