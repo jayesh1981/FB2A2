@@ -29,7 +29,7 @@
 						cache: true,
 						success: function(data) {
 							//alert(data);
-							$("#cover-photo").attr("src","http://www.resize.to?w=400&img="+data.cover.source);
+							$("#cover-photo").attr("src",data.cover.source);
 							$("div#Home>div>h1").html(data.name);
 							$("#about-link").html("About "+data.name);
 							$("#description").html(data.description);
