@@ -99,7 +99,7 @@
 								success: function(data) {
 								//data.location.latitude
 								//data.location.longitude
-									$("img#static-location-map").attr('src', "http://maps.google.com/maps/api/staticmap?&markers=color:green%7Clabel:G%7C"+data.location.latitude+","+data.location.longitude+"&zoom=15&size=200x200&maptype=roadmap&sensor=false");
+									$("img#static-location-map").attr('src', "http://maps.google.com/maps/api/staticmap?&markers=color:green%7Clabel:G%7C"+data.location.latitude+","+data.location.longitude+"&zoom=15&size=500x500&maptype=roadmap&sensor=false");
 									$.mobile.hidePageLoadingMsg();
 								}
 							});
@@ -230,7 +230,7 @@
 		<h1>Map</h1>
 	</div>
 	<div data-role="content">
-		<img id="static-location-map" src="">
+		<img id="static-location-map" src="" style="width:100%">
 		<ul id="morelinks" data-role="listview" data-inset="true">
 		</ul>
 		<a href="#directionspage" data-role="button" data-icon="search" data-theme="b">Get Directions</a> 
