@@ -24,7 +24,7 @@
 				//Load cover and basic info
 				$.mobile.showPageLoadingMsg();
 				$.ajax({
-						url: makeURL("/?fields=cover,name,website", access_token),
+						url: makeURL("/?fields=cover,name,description,website", access_token),
 						dataType: "json",
 						cache: true,
 						success: function(data) {
@@ -46,8 +46,9 @@
 				var fbid = "jayesh.kitukale";
 				var fbid = "harley-davidson";
 				var fbid = "robinsharma";
-				var fbid = "coca-cola";
 				var fbid = "whitesnowsoftware";
+				var fbid = "coca-cola";
+				var fbid = "FLHospital";
 				return url+fbid+action+"&access_token="+access_token;
 			}
 			$('div#eventspage')
@@ -75,7 +76,7 @@
 					$("img#about-picture").attr("src", makeURL("/picture", access_token));
 					$.mobile.showPageLoadingMsg();
 					$.ajax({
-						url: makeURL("/?fields=name,about,founded", access_token),
+						url: makeURL("/?fields=name,description,about,founded", access_token),
 						dataType: "json",
 						cache: true,
 						success: function(data) {
