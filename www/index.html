@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>PhotoSwipe</title>
+	<meta name="author" content="Ste Brennan - Code Computerlove - http://www.codecomputerlove.com/" />
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;" name="viewport" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	
+	<link href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" rel="stylesheet" />
+	<link href="css/jquery-mobile.css" type="text/css" rel="stylesheet" />
+	<link href="css/photoswipe.css" type="text/css" rel="stylesheet" />
+	
+	<script type="text/javascript" src="lib/klass.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>
+	<script type="text/javascript" src="lib/code.photoswipe.jquery-3.0.5.min.js"></script>
+	
+	
+	<script type="text/javascript">
+		(function(window, $, PhotoSwipe){
+			
+			$(document).ready(function(){
+				var access_token = "135464426458|axfHtzxEv_U8iofUZ-QduBHtp_g";
+				//Load cover and basic info
+				$.mobile.showPageLoadingMsg();
+				$.ajax({
+						url: makeURL("/?fields=cover,name", access_token),
+						dataType: "json",
+						cache: true,
+						success: function(data) {
+							//alert(data);
+							$("#cover-photo").attr("src",data.cover.source);
+							$("div#Home>div>h1").html(data.name);
+							$("#about-link").html("About "+data.name);
+							$.mobile.hidePageLoadingMsg();
+						}
+					});
+							
+				
+			function makeURL(action, access_token)
+			{
+				var url = "https://graph.facebook.com/";
+				//var fbid = "jayesh.kitukale";
+				var fbid = "coca-cola";
+				return url+fbid+action+"&access_token="+access_token;
+			}
+
+			$('div.gallery-page')
+				.live('pageshow', function(e){
+							//Load Photo Gallery
+							$.mobile.showPageLoadingMsg();
+							$.ajax({
+								url: makeURL("/photos?fields=images", access_token),
+								dataType: "json",
+								cache: true,
+								success: function(data) {
+									var string = "";
+									for(var i=0; i<data.data.length; i++)
+									{
+										var src = data.data[i].images[0].source;
+										string+="<li><a href='"+src+"' rel='external'><img src='"+src+"' /></a></li>";
+									}
+									$("#g1").html(string);
+									$.mobile.hidePageLoadingMsg();
+								}
+							});
+							
+							var 
+							currentPage = $(e.target),
+							options = {},
+							photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options,  currentPage.attr('id'));
+						return true;
+				})
+				.live('pagehide', function(e){
+						
+						var 
+							currentPage = $(e.target),
+							photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+
+						if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+							PhotoSwipe.detatch(photoSwipeInstance);
+						}
+						
+						return true;
+						
+					});
+				
+			});
+		
+		}(window, window.jQuery, window.Code.PhotoSwipe));
+		
+	</script>
+	
+</head>
+<body>
+<!--Home Page-->
+<div data-role="page" id="Home">
+	<div data-role="header">
+		<h1>!APPNAME!</h1>
+	</div>
+	<div data-role="content" >
+		<img style="width:100%" id="cover-photo" src=""/>
+		<ul data-role="listview" data-inset="true">
+			<li><a href="#photo-gallery" data-dom-cache="true">Photo Gallery</a></li> 
+			<li><a href="#events">Events</a></li> 
+		</ul> 
+		<ul data-role="listview" data-inset="true">
+			<li><a href="01-default.html" target="_blank" id="about-link">!ABOUT!</a></li> 
+		</ul> 
+		
+	</div>
+	<div data-role="footer">
+		<h4>&copy; 2012 WhiteSnow Software, India</h4>
+	</div>
+</div>
+<!--Photo Gallery Page-->
+<div data-role="page" data-add-back-btn="true" id="photo-gallery" class="gallery-page">
+	<div data-role="header">
+		<h1>Photo Gallery</h1>
+	</div>
+	<div data-role="content">	
+		<ul id="g1" class="gallery">
+		</ul>
+	</div>
+	<div data-role="footer">
+		<h4>&copy; 2012 WhiteSnow Software, India</h4>
+	</div>
+</div>
+</body>
+</html>
+<!--
+page B---pagebeforecreate
+page B---pagecreate
+page B---pageinit
+page A---pagebeforehide
+page B---pagebeforeshow
+page A---pageremove
+page A---pagehide
+page B---pageshow
+-->
